@@ -21,7 +21,7 @@ ax1.set_title('Robot Power Consumption (Cumulative Average)')
 
 for i in range(2):
     S.readline()
-for i in range(100):
+for i in range(1000):
     print("A")
     time_array.append(i)
     data.append(float((S.readline().decode())))
