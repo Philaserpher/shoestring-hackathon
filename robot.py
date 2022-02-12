@@ -14,6 +14,7 @@ data['CMA'] = data.Power.expanding().mean()
 
 
 '''sns.reset_defaults()
+
 sns.set(rc={'figure.figsize':(7,5)}, style="white")'''
 plt.plot(data.time,data['5s SMA'],'r-')
 plt.axis([data['time'].min(), data['time'].max(), 0, data['5s SMA'].mean()+5*data['5s SMA'].std()])
