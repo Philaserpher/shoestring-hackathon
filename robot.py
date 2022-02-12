@@ -9,9 +9,9 @@ data.columns = ["TimeStamp", "Power"]
 data.TimeStamp = pd.to_datetime(data.TimeStamp)
 data['time'] = (data.TimeStamp - data.TimeStamp[0]).dt.total_seconds()
 data = data.groupby('TimeStamp').mean().reset_index()
-data['5s SMA'] = data.rolling(10).mean().iloc[:,0]
+data['5s SMA'] = data.rolling(10).mean().iloc[:, 0]
 data['5s SMA'] = np.log10(data['5s SMA'])
-data['fft'] = np.fft.fft(data['5s SMA']) 
+data['fft'] = np.fft.fft(data['5s SMA'])
 data['CMA'] = data.Power.expanding().mean()
 print(data.fft)
 
