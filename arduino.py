@@ -14,7 +14,7 @@ DATA = [np.array([]), np.array([]), np.array([]), np.array([])]
 # this will be used to store and process all of our data
 
 # create out figure
-fig1 = plt.figure()
+fig1 = plt.figure(figsize=(19, 10))
 fig1.patch.set_facecolor(BG_COLOUR)
 
 # set up our first plot

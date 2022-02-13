@@ -16,14 +16,14 @@ data['fft'] = data['Power'].interpolate()
 
 for i in range(10):
     data['fft'][i] = 0
-data['fft'].apply(lambda x :np.hanning(1))
+data['fft'].apply(lambda x: np.hanning(1))
 data['fft'] = np.fft.fft(data['fft'])
 data['fft'] = data['fft'].abs()
 fvals = np.fft.fftfreq(len(data['fft']), d=1/3600)
 fvals = fvals[:len(data.fft)]
 
 
-fig = plt.figure()
+fig = plt.figure(figsize=(19, 10))
 
 plt.rcParams.update({'text.color': "red", 'axes.labelcolor': "red",
                      'xtick.color': "red", 'ytick.color': "red"})
@@ -42,7 +42,8 @@ fig.patch.set_facecolor([0.1373, 0.1529, 0.2392])
 ax1 = fig.add_subplot(313)
 ax1.set_facecolor([0.1373, 0.1529, 0.2392])
 ax1.plot(data.time, data['CMA'], 'r-', linewidth=0.6)
-ax1.axis([data['time'].min(), data['time'].max(), 0, data['CMA'].mean()+1*data['CMA'].std()])
+ax1.axis([data['time'].min(), data['time'].max(),
+          0, data['CMA'].mean()+1*data['CMA'].std()])
 ax1.set_xlabel('Time (s)')
 ax1.set_ylabel('Power (W)')
 ax1.set_title('Robot Power Consumption (Cumulative Average)')
@@ -58,7 +59,7 @@ ax2.axis([0, 75, 0, 400000])
 ax2.set_xlabel('Frequency (1/s)')
 ax2.set_ylabel('Power (W)')
 ax2.set_title('Fourier Transform of Consumption')
-manager = plt.get_current_fig_manager()
-manager.full_screen_toggle()
+
 plt.subplots_adjust(hspace=0.5)
+
 plt.show()
