@@ -128,3 +128,11 @@ while True:
     plot_box(AX3, DATA)
     counter += DT
     plt.pause(0.5)
+
+
+
+filtered_power = data[2]*np.hanning(len(data[2]))
+for i in range(5):
+    filtered_power[i] = 0
+filtered_power = (np.fft.fft(filtered_power)).abs()
+fvals = np.fft.fftfreq(len(filtered_power), d=1/3600)
