@@ -44,13 +44,14 @@ AX2.set_ylabel('Power (W)')
 AX2.set_title('Fan Power Consumption (Cumulative Average)')
 
 
-def plot_cumulative(ax2, data, max, max_pos, annotation, power_usage):
+def plot_cumulative(ax2, data, max, max_pos, annotation, power_usage,
+                    power_usage_total):
     g1, = ax2.plot(data[0], data[3], color=RED, linewidth=0.6)
     g2, = ax2.plot(data[0], data[3]+5, color=BLUE, linewidth=0.6)
     g3, = ax2.plot(data[0], data[3]-5, color=GREEN, linewidth=0.6)
     ax2.legend([g2, g1, g3],
                ['Upper Bound', 'Cumulative Average', 'Lower Bound'],
-               loc='lower right', facecolor=BG_COLOUR)
+               loc='lower left', facecolor=BG_COLOUR)
     ax2.axis([data[0].min(), data[0].max(),
               data[3].min()-50, data[3].max()+50])
     if data[3][-1]+5 >= max:
@@ -60,16 +61,28 @@ def plot_cumulative(ax2, data, max, max_pos, annotation, power_usage):
             pass
         max = int(data[3][-1]+5)
         max_pos = data[0][-1]
-        annotation = ax2.annotate(max, (max_pos, max+20))
+        max_plot = round(max*0.001, 3)
+        annotation = ax2.annotate(f"{max_plot} W", (max_pos, max+20), size=14, ha='right',
+                                  va='top', bbox=dict(boxstyle='round',
+                                                      fc=BG_COLOUR))
     average_rate_hour = int(data[3][-1]*3.6)
     try:
         power_usage.remove()
+        power_usage_total.remove()
     except:
         pass
-    power_usage = ax2.annotate(f"{average_rate_hour} J/h", xy=(data[0][-1], max-50),
+    power_usage = ax2.annotate(f"{average_rate_hour} J/h",
+                               xy=(data[0][-1], max-50),
                                size=14, ha='right', va='top',
                                bbox=dict(boxstyle='round', fc=BG_COLOUR))
-    return max, max_pos, annotation, power_usage
+
+    total_power_used = round(data[3][-1]*data[0][-1]*0.001, 2)
+
+    power_usage_total = ax2.annotate(f"{total_power_used} J used",
+                                     xy=(data[0][-1], max-70),
+                                     size=14, ha='right', va='top',
+                                     bbox=dict(boxstyle='round', fc=BG_COLOUR))
+    return max, max_pos, annotation, power_usage, power_usage_total
 
 
 AX3 = fig1.add_subplot(2, 2, 3)
@@ -89,6 +102,7 @@ MAX = 0
 MAX_POS = 0
 ANNOTATION = 0
 POWER_USAGE = 0
+POWER_USAGE_TOTAL = 0
 while True:
     new_value = float(S.readline().decode())
 
@@ -109,8 +123,8 @@ while True:
     DATA[3] = np.append(DATA[3], cumulative_average)
 
     plot_raw(AX1, DATA)
-    MAX, MAX_POS, ANNOTATION, POWER_USAGE = plot_cumulative(
-        AX2, DATA, MAX, MAX_POS, ANNOTATION, POWER_USAGE)
+    MAX, MAX_POS, ANNOTATION, POWER_USAGE, POWER_USAGE_TOTAL = plot_cumulative(
+        AX2, DATA, MAX, MAX_POS, ANNOTATION, POWER_USAGE, POWER_USAGE_TOTAL)
     plot_box(AX3, DATA)
     counter += DT
     plt.pause(0.5)
